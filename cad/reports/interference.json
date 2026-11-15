@@ -1,0 +1,15 @@
+{
+ "overlaps_mm3": [
+  [
+   "ring_L",
+   "pinion_L",
+   6.0
+  ],
+  [
+   "ring_R",
+   "pinion_R",
+   6.0
+  ]
+ ],
+ "note": "pairs with >0.5 mm^3 shared volume; press fits are intentional"
+}

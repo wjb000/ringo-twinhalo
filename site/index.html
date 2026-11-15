@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ringo · the robot that is its own wheels</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cellipse cx=%2711%27 cy=%2716%27 rx=%276%27 ry=%2713%27 fill=%27none%27 stroke=%27%237fe3ff%27 stroke-width=%273%27/%3E%3Cellipse cx=%2721%27 cy=%2716%27 rx=%276%27 ry=%2713%27 fill=%27none%27 stroke=%27%237fe3ff%27 stroke-width=%273%27/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/style.css">
+<script type="importmap">
+{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+               "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/" } }
+</script>
+</head>
+<body>
+<div id="stage"></div>
+<div id="labels"></div>
+
+<header id="brand">
+  <div class="logo"><span class="o1"></span><span class="o2"></span></div>
+  <div><h1>Ringo</h1><p>A pet robot that is its own wheels.</p></div>
+</header>
+
+<div id="toolbar">
+  <div class="grp" id="views">
+    <button data-v="34" class="on">3/4</button><button data-v="front">Front</button><button data-v="side">Side</button>
+    <button data-v="top">Top</button><button data-v="back">Back</button>
+  </div>
+  <div class="grp">
+    <button id="xray">X-ray</button><button id="lbl" class="on">Labels</button><button id="demo">Roll demo</button>
+  </div>
+  <div class="grp slider"><label>Explode</label><input id="explode" type="range" min="0" max="1" step="0.01" value="0"></div>
+  <div class="grp" id="layers"></div>
+</div>
+
+<div id="info" class="hidden">
+  <button id="infoclose">×</button>
+  <h3 id="iname"></h3><div id="imat"></div><p id="itext"></p><div id="isize"></div>
+</div>
+
+<aside id="panel">
+  <button id="ptoggle" title="Hide panel">⟩</button>
+  <div class="pin">
+  <section>
+    <h2>Concept</h2>
+    <p><b>The body is the wheels.</b> Two big frosted halo rings roll on the floor. A sealed pod with the face hangs inside them like a pendulum. Its battery and a steel keel sit low, so Ringo can't tip over and never has to balance. Each ring has a gear molded on its inside, and one tiny N20 motor per ring drives it. There's no axle, hub, bearing, suspension or balance loop.</p>
+  </section>
+  <section>
+    <h2>Why it wins</h2>
+    <ul>
+      <li><b>Iconic at a glance.</b> A glowing face floating in two hoops. It doesn't look like any car, puck, dog or droid, so a 2-second clip reads as Ringo.</li>
+      <li><b>Can't be knocked over.</b> The pendulum always rights it, the rings are the bumper, and a 160 mm wheel rolls over rug edges, cables and door sills that stop small-wheeled pets.</li>
+      <li><b>Personality for free.</b> The pod nods when it starts, leans into turns and wobbles when it stops. That's physics, not animation code.</li>
+      <li><b>Cheapest drivetrain possible.</b> Two $3.50 motors and two molded rings (one tool, flipped). About $36 to build, so it can sell for $129.</li>
+      <li><b>Useful every day.</b> Home check-in camera, pet-watch, a talking timer and reminders that roll over to you, a night-light, and a doorbell or alarm that comes to find you.</li>
+    </ul>
+  </section>
+  <section>
+    <h2>Hero features</h2>
+    <div class="chips">
+      <span>Self-righting pendulum</span><span>Rolls over 25 mm sills</span><span>Whole-body halo glow</span>
+      <span>Round-screen eyes</span><span>2 MP camera</span><span>On-device wake word</span><span>Turns to your voice</span>
+      <span>Cliff + obstacle ToF</span><span>Self-docking</span><span>Pat = button (IMU)</span><span>~4-6 h roam (est.)</span>
+    </div>
+  </section>
+  <section>
+    <h2>BOM</h2>
+    <div class="bom">
+      <div><span class="big" id="bproto">$—</span><span>prototype, qty 1, retail parts</span></div>
+      <div><span class="big" id="bvol">$—</span><span>per unit at 10k, factory cost</span></div>
+      <div><span class="big">$129</span><span>target retail</span></div>
+    </div>
+    <p class="small">Every line with its price and link: <a href="https://github.com/wjb000/ringo-twinhalo/blob/main/BOM.md" target="_blank">BOM.md</a>. One-time tooling is about <span id="btool">$67k</span> (estimate).</p>
+  </section>
+  <section>
+    <h2>Production</h2>
+    <p class="small"><b>Part count:</b> 6 molding tools for the robot and 1 for the dock. That makes 11 molded pieces, 1 PCB, 4 screws and 4 pins. Left and right rings and treads come from the same tool, flipped.</p>
+    <h4>DFM</h4>
+    <ul class="small">
+      <li>The pod splits at x=0, and both halves pull straight with no side actions. Walls are 2.0 mm with 4 screw bosses molded in.</li>
+      <li>The ring is a cored U-channel with 2.5 mm walls, open on one face so the core pulls straight. It has 24 ribs and a module-1 internal gear molded in. The TPU tread is 2-shot overmolded into a locking groove.</li>
+      <li>Rollers and pinions come from one POM family tool. The eye lens is PMMA with a hard coat.</li>
+      <li>Prototype: every part prints on a 0.4 mm nozzle. Use PETG for the shells and translucent PETG for the rings, and print the treads as TPU bands. ASCII STL and STEP files are in <a href="https://github.com/wjb000/ringo-twinhalo/tree/main/cad" target="_blank">/cad</a>.</li>
+    </ul>
+    <h4>Assembly (about 8 min)</h4>
+    <ol class="small">
+      <li>Snap the main board, battery and keel into the rear shell. Seat the motors in their saddles and press the pinions onto the shafts.</li>
+      <li>Fit the display and lens into the front shell, then plug the display and camera flex cables into the board.</li>
+      <li>Close the shells with 4 screws. The belly pads sit flush.</li>
+      <li>Press each motor inward on its spring saddle, slide a ring over the hub, then release so the pinion meshes. Press in 2 idler pins per side.</li>
+      <li>Park it on the dock, and the end-of-line test runs over the pogo USB.</li>
+    </ol>
+  </section>
+  <section class="small muted">
+    Parametric CadQuery source: <a href="https://github.com/wjb000/ringo-twinhalo" target="_blank">github.com/wjb000/ringo-twinhalo</a>. The electronics are datasheet-size envelopes. Nothing has been built or tested yet.
+  </section>
+  </div>
+</aside>
+
+<div id="loading"><div class="ring"></div><span>Loading Ringo…</span></div>
+<script type="module" src="assets/viewer.js"></script>
+</body>
+</html>
